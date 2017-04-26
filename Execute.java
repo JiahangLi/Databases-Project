@@ -1,5 +1,3 @@
-package lib;
-
 import java.io.*;
 import java.net.Socket;
 import java.sql.*;
@@ -12,7 +10,7 @@ public class Execute {
 
 	public static void main(String[] args) throws SQLException {
 		if (args.length != 7 || args.length != 8){
-			System.out.println("Usage DBConnectTest <BroncoUser> <BroncoPassword> <DBname> <query/update> <TaskNumber> <TaskQueryFile> <outputFile> <parametersforQuery>");
+			System.out.println("Usage Execute <BroncoUser> <BroncoPassword> <DBname> <query/update> <TaskNumber> <TaskQueryFile> <outputFile> <parametersforQuery>");
 		}
 		else{
 			Connection con = null;
@@ -33,11 +31,12 @@ public class Execute {
 				
 				String strSshHost = "onyx.boisestate.edu";         // hostname or ip or SSH server
 				int nSshPort = 22;                                 // remote SSH host port number
-				String strRemoteHost = "localhost";  			   // hostname or ip of your database server
+				String strRemoteHost = "127.0.0.1";  			   // hostname or ip of your database server
 
 				int nLocalPort = 3367;  						   // local port number use to bind SSH tunnel
-				
-				int nRemotePort = Integer.parseInt("10167");       // remote port number of your database 
+				String strDbUser = "msandbox";                     // database loging username
+				String strDbPassword = "123456";                   // database login password
+				int nRemotePort = 10167;       					   // remote port number of your database 
 				
 				/*
 				 * STEP 0
@@ -54,6 +53,7 @@ public class Execute {
 				 * */
 				Class.forName("com.mysql.jdbc.Driver");
 				con = DriverManager.getConnection("jdbc:mysql://localhost:"+nLocalPort, strDbUser, strDbPassword);
+				System.out.println("Connected database successfully...");
 
 				/*
 				 * STEP 3
@@ -86,8 +86,8 @@ public class Execute {
 				
 				/*TO INSERT INTO TABLES
 				 * You can also read from a file and store in a data structure of your choice*/
-				String[] data = {"boise", "nampa"};
-				insertLocations(con,data);
+			//	String[] data = {"boise", "nampa"};
+			//	insertLocations(con,data);
 				
 			}
 			catch( Exception e )
