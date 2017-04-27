@@ -6,13 +6,29 @@ import java.util.*;
 import com.jcraft.jsch.*;
 import com.mysql.jdbc.ConnectionImpl;
 
+/**
+ * CS410 database project: Twitter System
+ * Group 6: Jiahang Li, Kenny Overly, Michael Plaisance
+ * Driver Class: Connect to DB, run queries/updates
+ * @author MichaelPlaisance
+ *
+ */
+
 public class Execute {
+	
+private String strSshUser;                  	   // SSH loging username
+private String strSshPassword;                   // SSH login password
+private String strDBname;                  	   // Database name
+private	String strQueryUpdate;                   // Either 'Query' or 'Update'
+private	String strTaskNumber;               	   // The task number that will be queried or updated
+private	String strTaskQueryFile;                 // The txt file name that contains the command
+private	String strOutputFile;                    // The outputted txt file
 
 	public static void main(String[] args) throws SQLException {
-		if (args.length != 7 || args.length != 8){
-			System.out.println("Usage Execute <BroncoUser> <BroncoPassword> <DBname> <query/update> <TaskNumber> <TaskQueryFile> <outputFile> <parametersforQuery>");
-		}
-		else{
+		//if (args.length != 7 || args.length != 8){
+		//	System.out.println("Usage Execute <BroncoUser> <BroncoPassword> <DBname> <query/update> <TaskNumber> <TaskQueryFile> <outputFile> <parametersforQuery>");
+		//}
+	//	else{
 			Connection con = null;
 			Session session = null;
 			try
@@ -31,7 +47,7 @@ public class Execute {
 				
 				String strSshHost = "onyx.boisestate.edu";         // hostname or ip or SSH server
 				int nSshPort = 22;                                 // remote SSH host port number
-				String strRemoteHost = "127.0.0.1";  			   // hostname or ip of your database server
+				String strRemoteHost = "localhost";  			   // hostname or ip of your database server
 
 				int nLocalPort = 3367;  						   // local port number use to bind SSH tunnel
 				String strDbUser = "msandbox";                     // database loging username
@@ -43,6 +59,7 @@ public class Execute {
 				 * CREATE a SSH session to ONYX
 				 * 
 				 * */
+				System.out.println("Attempting to connect to " + strSshUser + "...");
 				session = Execute.doSshTunnel(strSshUser, strSshPassword, strSshHost, nSshPort, strRemoteHost, nLocalPort, nRemotePort);
 				
 				
@@ -52,7 +69,7 @@ public class Execute {
 				 * 
 				 * */
 				Class.forName("com.mysql.jdbc.Driver");
-				con = DriverManager.getConnection("jdbc:mysql://localhost:"+nLocalPort, strDbUser, strDbPassword);
+				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:"+nLocalPort, strDbUser, strDbPassword);
 				System.out.println("Connected database successfully...");
 
 				/*
@@ -107,7 +124,7 @@ public class Execute {
 			}
 
 		}
-	}
+//	}
 	
 	private static Session doSshTunnel( String strSshUser, String strSshPassword, String strSshHost, int nSshPort, String strRemoteHost, int nLocalPort, int nRemotePort ) throws JSchException
 	{
